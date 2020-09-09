@@ -14,9 +14,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
+
+import jp.wasabeef.glide.transformations.gpu.SepiaFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.SketchFilterTransformation;
+import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +43,25 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType("image/*");
         startActivityForResult(intent, 1);
+    }
+
+    public  void apply(Transformation<Bitmap> filter) {
+        Glide.with(this)
+                .load(image)
+                .apply(RequestOptions.bitmapTransform(filter))
+                .into(imageView);
+    }
+
+    public void applySepia(View view) {
+        apply(new SepiaFilterTransformation());
+    }
+
+    public void applyToon(View view) {
+        apply(new ToonFilterTransformation());
+    }
+
+    public void applySketch(View view) {
+        apply(new SketchFilterTransformation());
     }
 
     @Override
